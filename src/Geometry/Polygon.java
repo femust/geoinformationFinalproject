@@ -67,12 +67,26 @@ public class Polygon {
 		return isOkX && isOkY;
 	}
 	
-	public boolean isInPolygon(Point point )
+	public boolean isInPolygon(Point point, boolean useBoundingBox)
 	{
-		boolean isInBox = isInBoundingBox(point);
-		if (!isInBox) {
-			return false;
+		boolean isInPolygon = false;
+		if (useBoundingBox)
+		{
+			boolean isInBox = isInBoundingBox(point);
+			if (!isInBox) {
+				return isInPolygon;
+			}
+			isInPolygon = checkInPolygon(point);
 		}
+		if (!useBoundingBox)
+		{
+			isInPolygon = checkInPolygon(point);
+		}
+		return isInPolygon;
+	}
+	
+	private boolean checkInPolygon(Point point)
+	{
 		int counter = 0;
 	    for (int i = 0; i < points.size(); i++) {
 			Point q = points.get(i);
@@ -86,6 +100,7 @@ public class Polygon {
 			if (point.isToTheLeftOf(r, q)) counter++;}
 		}
 	return (counter % 2 == 1);
+		
 	}
 	
 }
