@@ -26,21 +26,26 @@ public class Main {
 		Point pointToCheck = new Point(0,-0.99999995);
 		var theta0 = Math.atan2(vertex1.getY() - center.getY(), vertex1.getX() - center.getX());
 		var radius = vertex1.distance(center);
+		long startTime;
 		
-		for (int n = 3 ; n < 10001 ; n++)
+		
+		for (int n = 3 ; n < 10000 ; n++)
 		{
-			long startTime = System.nanoTime();
-			ArrayList<Point> points = new ArrayList<Point>();
+			ArrayList<Point> points = new ArrayList<Point>(n);
 			for (int i = 0; i < n ; i ++)
 			{
 				Point pointToAdd = new Point(center.getX() + radius * Math.cos((2 * Math.PI * i / n) + theta0),
 						center.getY() + radius * Math.sin((2 * Math.PI * i / n)+ theta0));
 				points.add(pointToAdd);
 			}
+			
+					
 			Polygon polygon = new Polygon(points);
+			startTime = System.nanoTime();
 			polygon.isInPolygon(pointToCheck, boundingBox);
 			long endTime = System.nanoTime();
 			long totalTime = endTime - startTime;
+			points.clear();
 			time.add(totalTime);
 			writer.println(totalTime);
 
